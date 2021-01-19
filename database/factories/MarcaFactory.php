@@ -22,7 +22,9 @@ class MarcaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'nombre'=>$this->faker->unique()->word,
+            'historia'=>$this->faker->sentence($nbWords = 4, $variableNbWords = true),
+            'url'=>$this->faker->optional()->url,
         ];
     }
 }

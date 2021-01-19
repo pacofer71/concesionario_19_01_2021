@@ -15,7 +15,7 @@ class CreateMarcasTable extends Migration
     {
         Schema::create('marcas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('nombre')->unique();
             $table->text('historia');
             $table->string('url')->nullable();
             $table->string('logo')->default('storage/img/marcas/default.png');

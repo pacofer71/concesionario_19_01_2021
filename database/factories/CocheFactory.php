@@ -22,7 +22,7 @@ class CocheFactory extends Factory
     public function definition()
     {
         return [
-            //
+
         ];
     }
 }
