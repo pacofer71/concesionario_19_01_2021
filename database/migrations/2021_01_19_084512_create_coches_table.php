@@ -23,7 +23,7 @@ class CreateCochesTable extends Migration
             $table->ForeignId('marca_id')->nullable();
             //hacemos que el campo anterior se foreign key de la tabla coches del campo id
             $table->foreign('marca_id')->references('id')
-            ->on('coches')
+            ->on('marcas')
             ->onUpdate('cascade')
             ->onDelete('set null');
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class MarcaController extends Controller
 {
@@ -14,7 +16,8 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        //
+        $marcas=Marca::orderBy('nombre')->paginate(4);
+        return view('marcas.index', compact('marcas'));
     }
 
     /**
@@ -24,7 +27,7 @@ class MarcaController extends Controller
      */
     public function create()
     {
-        //
+        return view('marcas.create');
     }
 
     /**
@@ -35,7 +38,37 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre'=>['required'],
+            'historia'=>['required'],
+            'url'=>['nullable', 'url']
+        ]);
+        //---------------------------------
+        $marca=New Marca();
+        $marca->nombre=ucwords($request->nombre);
+        $marca->historia=ucfirst($request->historia);
+
+        if($request->has('url')) $marca->url=$request->url;
+
+        //vamos con la imagen NO es un campo obligatorio
+        //1.- comprbamos si la he subido
+        if($request->has('logo')){
+            //he subido una imagen
+            //valido que sea un fichero de imagen
+            $request->validate([
+                'logo'=>['image']
+            ]);
+            //si es un fichero de imagen
+            $fileImagen=$request->file('logo');
+            $nombre="img/marcas/".uniqid()."_".$fileImagen->getClientOriginalName();
+            //dd($nombre);
+            Storage::Disk("public")->put($nombre, File::get($fileImagen));
+
+            $marca->logo="storage/".$nombre;
+        }
+        $marca->save();
+        return redirect()->route('marcas.index')->with('mensaje', "Marca Guardada.");
+
     }
 
     /**
@@ -46,7 +79,7 @@ class MarcaController extends Controller
      */
     public function show(Marca $marca)
     {
-        //
+        return view('marcas.show', compact('marca'));
     }
 
     /**
@@ -57,7 +90,7 @@ class MarcaController extends Controller
      */
     public function edit(Marca $marca)
     {
-        //
+        return view('marcas.edit', compact('marca'));
     }
 
     /**
@@ -69,7 +102,40 @@ class MarcaController extends Controller
      */
     public function update(Request $request, Marca $marca)
     {
-        //
+        $request->validate([
+            'nombre'=>['required'],
+            'historia'=>['required'],
+            'url'=>['nullable', 'url']
+        ]);
+        //---------------------------------
+        $marca->update([
+        'nombre'=>ucwords($request->nombre),
+        'historia'=>ucfirst($request->historia),
+        'url'=>$request->url
+        ]);
+
+        //vamos con la imagen NO es un campo obligatorio
+        //1.- comprbamos si la he subido
+        if($request->has('logo')){
+            //he subido una imagen
+            //valido que sea un fichero de imagen
+            $request->validate([
+                'logo'=>['image']
+            ]);
+            //si es un fichero de imagen
+            $fileImagen=$request->file('logo');
+            $nombre="img/marcas/".uniqid()."_".$fileImagen->getClientOriginalName();
+            //si he subido una image borro la antigua siempre que no sea default
+            if(basename($marca->logo)!="default.png"){
+                unlink($marca->logo);
+            }
+
+            Storage::Disk("public")->put($nombre, \File::get($fileImagen));
+            $marca->update(['logo'=>"storage/".$nombre]);
+        }
+
+        return redirect()->route('marcas.index')->with('mensaje', "Registro actualizado.");
+
     }
 
     /**
@@ -80,6 +146,13 @@ class MarcaController extends Controller
      */
     public function destroy(Marca $marca)
     {
-        //
+        $logoMarca=basename($marca->logo);
+        //dd($marca->logo);
+
+        if($logoMarca!='default.png'){
+            unlink($marca->logo);
+        }
+        $marca->delete();
+        return redirect()->route('marcas.index')->with("mensaje", "Marca Borrada correctamente.");
     }
 }
