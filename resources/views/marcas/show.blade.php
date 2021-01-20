@@ -16,7 +16,9 @@ Detalle Marca ({{$marca->id}})
       <p class="card-text"><b>Sitio Web: </b>{{$marca->url}}</p>
       <p class="card-text"><b>Registro creado: </b>{{$marca->created_at}}</p>
       <p class="card-text"><b>Registro actualizado: </b>{{$marca->updated_at}}</p>
-      <a href="{{route('marcas.index')}}" class="btn btn-primary mt-2"><i class="fa fa-house-user"></i> Inicio</a>
+      <a href="{{route('marcas.index')}}" class="btn btn-primary mt-2"><i class="fa fa-house-user"></i> Inicio Marcas</a>
+      <a href="{{route('inicio')}}" class="btn btn-primary mt-2"><i class="fa fa-house-user"></i> Inicio</a>
+
     </div>
   </div>
 @endsection

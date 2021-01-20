@@ -22,8 +22,8 @@ class MarcaFactory extends Factory
     public function definition()
     {
         return [
-            'nombre'=>$this->faker->unique()->word,
-            'historia'=>$this->faker->sentence($nbWords = 4, $variableNbWords = true),
+            'nombre'=>ucwords($this->faker->unique()->word),
+            'historia'=>ucfirst($this->faker->sentence($nbWords = 4, $variableNbWords = true)),
             'url'=>$this->faker->optional()->url,
         ];
     }

@@ -24,8 +24,8 @@ class CocheFactory extends Factory
     {
             $marcaIds=Marca::pluck('id')->toArray();
         return [
-                'modelo'=>$this->faker->sentence($nbWords = 2, $variableNbWords = true),
-                'color'=>$this->faker->safeColorName,
+                'modelo'=>ucwords($this->faker->sentence($nbWords = 2, $variableNbWords = true)),
+                'color'=>ucfirst($this->faker->safeColorName),
                 'kilometros'=>$this->faker->numberBetween($min = 1000, $max = 100000),
                 'marca_id'=>$this->faker->optional()->randomElement($marcaIds)
         ];

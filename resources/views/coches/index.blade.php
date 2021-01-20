@@ -16,20 +16,28 @@ Marcas Clásicas S.A.
     <thead>
       <tr>
         <th scope="col">Detalle</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Logo</th>
+        <th scope="col">Marca</th>
+        <th scope="col">Modelo</th>
+        <th scope="col">Color</th>
         <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
-        @foreach($marcas as $item)
+        @foreach($coches as $item)
         <tr style="vertical-align: middle">
         <th scope="row">
-            <a href="{{route('marcas.show', $item)}}" class="btn btn-info btn-lg"><i class="fa fa-info"></i>
+            <a href="{{route('coches.show', $item)}}" class="btn btn-info btn-lg"><i class="fa fa-info"></i>
                 Detalles</a>
         </th>
-        <td>{{$item->nombre}}</td>
-        <td><img src="{{asset($item->logo)}}" width="95rem" height="90rem" class="rounded-circe"></td>
+        <td>
+            @if(isset($item->marca->nombre))
+            {{$item->marca->nombre}}
+          @else
+          Sin Marca
+          @endif
+        </td>
+        <td>{{$item->modelo}}</td>
+        <td>{{$item->color}}</td>
         <td>
             <form name="a" action="{{route('marcas.destroy', $item)}}" method='POST' class="form-inline">
                 @csrf
@@ -43,5 +51,5 @@ Marcas Clásicas S.A.
       @endforeach
     </tbody>
   </table>
-  {{$marcas->links()}}
+  {{$coches->links()}}
 @endsection

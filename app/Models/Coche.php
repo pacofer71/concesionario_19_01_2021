@@ -10,6 +10,7 @@ class Coche extends Model
     use HasFactory;
     protected $fillable=['modelo', 'color', 'kilometros', 'marca_id', 'foto'];
     public function marca(){
+        //return $this->belongsTo(Marca::class)->withDefault(['nombre'=>'Sin Marca']);
         return $this->belongsTo(Marca::class);
     }
 }

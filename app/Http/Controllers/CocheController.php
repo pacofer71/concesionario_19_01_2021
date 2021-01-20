@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Coche;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CocheController extends Controller
 {
@@ -14,7 +16,9 @@ class CocheController extends Controller
      */
     public function index()
     {
-        //
+      $coches=DB::table('coches')->select('coches.*')->leftJoin('marcas', 'marcas.id', "=", 'coches.marca_id')->orderBy('marcas.nombre')->get();
+        return view('coches.index', compact('coches'));
+
     }
 
     /**

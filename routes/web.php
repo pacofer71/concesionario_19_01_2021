@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::get('/', '\App\Http\Controllers\ConcesionarioController@inicio')->name('inicio');
 Route::resource('marcas', '\App\Http\Controllers\MarcaController');
 Route::resource('coches', '\App\Http\Controllers\CocheController');
