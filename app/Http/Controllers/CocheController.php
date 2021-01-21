@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coche;
+use App\Models\Marca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,9 +15,21 @@ class CocheController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      $coches=DB::table('coches')->select('coches.*')->leftJoin('marcas', 'marcas.id', "=", 'coches.marca_id')->orderBy('marcas.nombre')->get();
+        $marcas=Marca::orderBy('nombre')->get();
+        $miMarca=$request->get('marca_id');
+        $kilos=$request->kilometros;
+        $coches=Coche::orderBy('marca_id')->orderBy('modelo')->marca_id($miMarca)->kilometros($kilos)->paginate(3);
+        return view('coches.index', compact('coches', 'marcas', 'request'));
+    }
+    public function index1(Marca $marca){
+        if($marca!=null){
+            $coches=Coche::orderBy('modelo')->marca_id($marca->id)->paginate(3);
+        }
+        else{
+            $coches=Coche::orderBy("marca_id")->paginate(3);
+        }
         return view('coches.index', compact('coches'));
 
     }
@@ -85,5 +98,9 @@ class CocheController extends Controller
     public function destroy(Coche $coche)
     {
         //
+    }
+    public function cochesxmarca(Marca $marca){
+        $coches=Coche::orderBy('modelo')->marca_id($marca->id)->paginate(3);
+        return view('coches.cochesxmarca', compact('coches'));
     }
 }

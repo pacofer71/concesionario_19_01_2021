@@ -155,4 +155,5 @@ class MarcaController extends Controller
         $marca->delete();
         return redirect()->route('marcas.index')->with("mensaje", "Marca Borrada correctamente.");
     }
+   
 }
