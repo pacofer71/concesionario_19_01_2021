@@ -6,6 +6,8 @@ use App\Models\Coche;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\Matricula;
+use App\Http\Requests\CocheRequest;
 
 
 class CocheController extends Controller
@@ -41,7 +43,8 @@ class CocheController extends Controller
      */
     public function create()
     {
-        //
+        $marcas=Marca::orderBy('nombre')->get();
+        return view('coches.create', compact('marcas'));
     }
 
     /**
@@ -50,9 +53,18 @@ class CocheController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CocheRequest $request)
     {
-        //
+       $datos=$request->validated();
+       $coche = new Coche();
+       $coche->modelo=$datos['modelo'];
+       $coche->color=$datos['color'];
+       $coche->kilometros=$datos['kilometros'];
+       if(isset($datos['nombre_foto'])) $coche->foto = $datos['nombre_foto'];
+       if(isset($datos['marca_id'])) $coche->marca_id=$datos['marca_id'];
+       $coche->save();
+       return redirect()->route('coches.index')->with("mensaje", "Coche Creado.");
+
     }
 
     /**
